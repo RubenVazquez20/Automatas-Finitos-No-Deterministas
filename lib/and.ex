@@ -69,4 +69,21 @@ defmodule And do
     }
   end
 
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # E-closure _Pregunta 3
+  def e_closure_part_two(del, act, stack_au) do
+     Enum.reduce(del[{act, nil}] || [], stack_au, fn x, check ->
+      if x not in check do
+        e_closure_part_two(del, x, [x | check])
+      else
+        check
+      end
+    end)
+  end
+
+  def e_closure(auto, lost) do
+    Enum.reduce(lost, lost, fn xs, acum -> e_closure_part_two(auto.delta, xs, acum)
+    end)|> Enum.sort()
+  end
+
 end
