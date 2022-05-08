@@ -1,33 +1,12 @@
 defmodule And do
 
-  def autondf([]), do: [[]]
-  def autondf([head|tail])do
-    rsduo = autondf(tail)
-    autondf(head,rsduo,rsduo)
-  end
-
-  defp autondf(_, [], acum), do: acum
-  defp autondf(val, [head|tail], acum), do: autondf(val,tail, [[val|head] | acum])
-
-
-  def prune(aut) do
-    inicio = aut.initstate
-    delta = correct_trans(aut, inicio, [], Map.new())|> List.flatten() |> join()
-
-    statesb = Enum.map(delta, fn {{state1, _}, state2} -> [state1] ++ [state2] end)
-    |> Enum.concat() |> Enum.uniq() |> Enum.sort()
-
-    finals = Enum.filter(aut.finalstates, fn fin -> fin in statesb end)
-    |> Enum.uniq()
-
-    %{%{%{aut|delta: delta}|states: statesb}|finalstates: finals}
-  end
-
+  # Unir los mapas sin generar conflictos con Map.merge
   defp join([]), do: Map.new()
   defp join([head|tail]) do
     Map.merge(head, join(tail))
   end
 
+  # Definir transiciones válidas
   defp correct_trans(aut, actual, check, delta) do
     check = check ++ [actual]
     aut.delta
@@ -41,6 +20,7 @@ defmodule And do
     end)
   end
 
+  # Crear el nuevo delta
   def gen_delta(n) do
     statesb = autondf(n.states)
     deltav =
@@ -53,8 +33,31 @@ defmodule And do
     {statesb, deltav}
   end
 
+  # Realizar recorrido por profundidad
+  def autondf([]), do: [[]]
+  def autondf([head|tail])do
+    rsduo = autondf(tail)
+    autondf(head,rsduo,rsduo)
+  end
 
+  defp autondf(_, [], acum), do: acum
+  defp autondf(val, [head|tail], acum), do: autondf(val,tail, [[val|head] | acum])
 
+  #Funcion para podar el grafo y solo llegar a los estado scorrectos
+  def prune(aut) do
+    inicio = aut.initstate
+    delta = correct_trans(aut, inicio, [], Map.new())|> List.flatten() |> join()
+
+    statesb = Enum.map(delta, fn {{state1, _}, state2} -> [state1] ++ [state2] end)
+    |> Enum.concat() |> Enum.uniq() |> Enum.sort()
+
+    finals = Enum.filter(aut.finalstates, fn fin -> fin in statesb end)
+    |> Enum.uniq()
+
+    %{%{%{aut|delta: delta}|states: statesb}|finalstates: finals}
+  end
+
+  # Funcion para convertir un automata finito no determinista a un automata finito determinista
   def determinize(auto) do
     {statesb,delt} = gen_delta(auto)
     %{

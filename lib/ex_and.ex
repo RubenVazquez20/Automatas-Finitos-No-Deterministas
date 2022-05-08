@@ -1,41 +1,41 @@
 defmodule And_f do
 
-  def a1 do
+  def and1 do
     %{
       alpha: ~w[a b],
-      states: [P0,P1,P2,P3],
-      istate: P0,
-      fstates: [P3],
+      states: [E0,E1,E2,E3],
+      initstate: E0,
+      finalstates: [E3],
       delta: %{
-        {P0, "a"} => [P0,P1],
-        {P0, "b"} => [P0],
-        {P1, "a"} => [],
-        {P1, "b"} => [P2],
-        {P2, "a"} => [],
-        {P2, "b"} => [P3],
-        {P3, "a"} => [],
-        {P3, "b"} => [],
+        {E0, "a"} => [E0,E1],
+        {E0, "b"} => [E0],
+        {E1, "a"} => [],
+        {E1, "b"} => [E2],
+        {E2, "a"} => [],
+        {E2, "b"} => [E3],
+        {E3, "a"} => [],
+        {E3, "b"} => [],
       }
     }
   end
 
-  def e do
+  def and2 do
     %{
       alpha: ~w[a b],
-      states: [P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, P10],
-      istate: P0,
-      fstates: [P10],
+      states: [E0, E1, E2, E3, E4, E5, E6, E7, E8, E9, E10],
+      initstate: E0,
+      finalstates: [E10],
       delta: %{
-        {P0, nil} => [P1, P7],
-        {P1, nil} => [P2, P3],
-        {P2, "a"} => [P4],
-        {P3, "b"} => [P5],
-        {P4, nil} => [P6],
-        {P5, nil} => [P6],
-        {P6, nil} => [P1, P7],
-        {P7, "a"} => [P8],
-        {P8, "b"} => [P9],
-        {P9, "b"} => [P10]
+        {E0, nil} => [E1, E7],
+        {E1, nil} => [E2, E3],
+        {E2, "a"} => [E4],
+        {E3, "b"} => [E5],
+        {E4, nil} => [E6],
+        {E5, nil} => [E6],
+        {E6, nil} => [E1, E7],
+        {E7, "a"} => [E8],
+        {E8, "b"} => [E9],
+        {E9, "b"} => [E10]
       }
     }
   end
